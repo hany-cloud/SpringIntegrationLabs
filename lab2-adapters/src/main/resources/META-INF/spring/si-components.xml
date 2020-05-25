@@ -1,0 +1,40 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
+	xmlns:int-file= "http://www.springframework.org/schema/integration/file"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd 
+		http://www.springframework.org/schema/integration 
+		http://www.springframework.org/schema/integration/spring-integration.xsd 
+		http://www.springframework.org/schema/integration/stream 
+		http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd
+		http://www.springframework.org/schema/integration/file 
+		http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+		">
+		
+	<!-- stdin-channel-adapter that wraps the Java Standard Input stream; 
+		taking text entered into the Standard Input stream and putting a text a message into 
+		the associated channel "messageChannel" -->
+	<!-- <int-stream:stdin-channel-adapter id="producer" channel="messageChannel" />  -->
+	
+	<!-- poller that is used by the stdin-channel-adapter to determine how 
+		often to check the Standard Input stream for text 
+		(in this case, it checks every 200 milliseconds) -->
+	<!-- <int:poller id="defaultPoller" default="true" max-messages-per-poll="5" fixed-rate="200" /> -->
+	
+	<!-- File input adapter -->
+	<int-file:inbound-channel-adapter id="producer-file-adapter" channel="messageChannel" directory="file:c://inbound" prevent-duplicates="true"> 
+		<int:poller fixed-rate="5000" /> 
+	</int-file:inbound-channel-adapter>
+	
+	
+	<!-- File output adapter -->
+	<int-file:outbound-channel-adapter channel="messageChannel" id="consumer-file-adapter" directory="file:c://outbound" />
+	
+	
+	<!-- Direct channel -->
+	<int:channel id="messageChannel" />
+	
+</beans>	

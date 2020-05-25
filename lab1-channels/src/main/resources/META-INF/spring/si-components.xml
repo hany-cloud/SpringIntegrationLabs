@@ -1,0 +1,86 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd 
+		http://www.springframework.org/schema/integration 
+		http://www.springframework.org/schema/integration/spring-integration.xsd 
+		http://www.springframework.org/schema/integration/stream 
+		http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd">
+		
+	<!-- ========================================================================================= -->
+	<!-- 								Subscribable Channel 									   -->
+	
+	<!-- stdin-channel-adapter that wraps the Java Standard Input stream; 
+		taking text entered into the Standard Input stream and putting a text a message into 
+		the associated channel "messageChannel" -->
+	<!-- <int-stream:stdin-channel-adapter id="producer" channel="messageChannel" />  -->
+	
+	
+	<!-- Create the Subscribable Channel -->
+	<!-- <int:publish-subscribe-channel id="messageChannel" /> -->
+	
+	
+	<!-- couple of stdout-channel-adapters that wrap the Java Standard Output stream. 
+		They take the messages from the associated channel and display it to the Console -->
+	<!-- <int-stream:stdout-channel-adapter id="consumer1" channel="messageChannel" 
+		append-newline="true" /> 
+	<int-stream:stdout-channel-adapter id="consumer2" channel="messageChannel" 
+		append-newline="true" />
+	 -->
+	
+	
+	<!-- poller that is used by the stdin-channel-adapter to determine how 
+		often to check the Standard Input stream for text 
+		(in this case, it checks every 200 milliseconds) -->
+	<!-- <int:poller id="defaultPoller" default="true" max-messages-per-poll="5" fixed-rate="200" />  -->
+	
+	<!-- ========================================================================================= -->
+	<!-- 									Pollable Channel 									   -->
+	
+	<!-- Add a Pollable Channel, with a buffering capacity of two (2) messages -->
+	<int:channel id="messageChannel"> 
+		<int:queue capacity="2" /> 
+	</int:channel>
+	
+	<!-- By stopping the Out-bound adapter (the consumer, who takes the messages from the channel),
+		 only 2 messages will be kept in the queue, and the 3rd message will not be sent to the channel -->
+	<!-- <int-stream:stdout-channel-adapter id="consumer1" channel="messageChannel" 
+		append-newline="true" /> --> 
+	
+	
+	<!-- poller that is used by the stdin-channel-adapter to determine how 
+		often to check the Standard Input stream for text 
+		(in this case, it checks every 200 milliseconds) -->
+	<!-- <int:poller id="defaultPoller" default="true" max-messages-per-poll="5" fixed-rate="200" /> -->
+	
+	<!-- ========================================================================================= -->
+	<!-- 									Direct Channel 									   -->
+
+	<!-- stdin-channel-adapter that wraps the Java Standard Input stream; 
+		taking text entered into the Standard Input stream and putting a text a message into 
+		the associated channel "messageChannel" -->
+	<!-- <int-stream:stdin-channel-adapter id="producer" channel="messageChannel" /> -->
+	
+	
+	<!-- Add Direct Channel, It is a subscribable channel but it acts more like 
+		a point-to-point channel (like a pollable channel). -->
+	<!-- <int:channel id="messageChannel" /> -->
+	
+	
+	<!-- couple of stdout-channel-adapters that wrap the Java Standard Output stream. 
+		They take the messages from the associated channel and display it to the Console -->
+	<!-- <int-stream:stdout-channel-adapter id="consumer1" channel="messageChannel" 
+		append-newline="true" />  --> 
+	
+	<!-- <int-stream:stdout-channel-adapter id="consumer2" channel="messageChannel" 
+		append-newline="true" />  -->
+
+	
+	<!-- poller that is used by the stdin-channel-adapter to determine how 
+		often to check the Standard Input stream for text 
+		(in this case, it checks every 200 milliseconds) -->
+	<!-- <int:poller id="defaultPoller" default="true" max-messages-per-poll="5" fixed-rate="200" /> -->
+</beans>	
